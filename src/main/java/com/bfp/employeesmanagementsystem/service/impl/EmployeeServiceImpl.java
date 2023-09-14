@@ -2,6 +2,7 @@ package com.bfp.employeesmanagementsystem.service.impl;
 
 import com.bfp.employeesmanagementsystem.dto.EmployeeDto;
 import com.bfp.employeesmanagementsystem.entity.Employee;
+import com.bfp.employeesmanagementsystem.repository.impl.EmployeeRepositoryImpl;
 import com.bfp.employeesmanagementsystem.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,24 +13,28 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
+
+    private final EmployeeRepositoryImpl employeeRepository;
+
     @Override
     public Employee getEmployeeById(Long id) {
-        Employee employee = Employee.builder().id(1L).firstName("Get").lastName("single Prado").build();
-        return employee;
+        return employeeRepository.getEmployeeById(id);
     }
 
     @Override
     public List<Employee> getEmployees() {
-        Employee employee = Employee.builder().id(1L).firstName("Get").lastName("Prados").build();
-        List<Employee> employees = new ArrayList<>();
-        employees.add(employee);
-        return employees;
+        return employeeRepository.getEmployees();
     }
 
     @Override
     public Employee createEmployee(EmployeeDto employeeDto) {
-        Employee employee = Employee.builder().id(1L).firstName("Create").lastName("Prado").build();
-        return employee;
+        Employee employee = Employee.builder()
+                .id(null)
+                .firstName(employeeDto.getFirstName())
+                .lastName(employeeDto.getLastName())
+                .role(employeeDto.getRole())
+                .build();
+        return employeeRepository.createEmployee(employee);
     }
 
     @Override
@@ -38,8 +43,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee updateEmployee(Long id) {
-        Employee employee = Employee.builder().id(1L).firstName("Update").lastName("Prado").build();
-        return employee;
+    public Employee updateEmployee(Long id, EmployeeDto employeeDto) {
+        Employee employee = Employee.builder()
+                .id(id)
+                .firstName(employeeDto.getFirstName())
+                .lastName(employeeDto.getLastName())
+                .role(employeeDto.getRole())
+                .build();
+        return employeeRepository.updateEmployee(employee);
     }
 }
