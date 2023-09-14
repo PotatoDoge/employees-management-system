@@ -1,6 +1,5 @@
 package com.bfp.employeesmanagementsystem.repository.impl;
 
-import com.bfp.employeesmanagementsystem.dto.EmployeeDto;
 import com.bfp.employeesmanagementsystem.entity.Employee;
 import com.bfp.employeesmanagementsystem.repository.EmployeeRepository;
 import com.bfp.employeesmanagementsystem.rowmapper.EmployeeRowMapper;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.List;
 
 import static com.bfp.employeesmanagementsystem.query.EmployeeQuery.*;
@@ -65,9 +63,30 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return null;
     }
 
-    private SqlParameterSource getSqlParametersSource(Employee employee) {
+    @Override
+    public Employee updateEmployee(Employee employee) {
+        try{
+            SqlParameterSource parameters = getSqlParametersSourceWithId(employee);
+            Long employeeId = (long) jdbc.update(UPDATE_EMPLOYEE, parameters);
+            employee.setId(employeeId);
+            return employee;
+        }
+        catch (Exception e){
+            log.error("Error while fetching user: " + e);
+        }
+        return null;
+    }
 
+    private SqlParameterSource getSqlParametersSource(Employee employee) {
         return new MapSqlParameterSource()
+                .addValue("firstName", employee.getFirstName())
+                .addValue("lastName", employee.getLastName())
+                .addValue("role", employee.getRole());
+    }
+
+    private SqlParameterSource getSqlParametersSourceWithId(Employee employee) {
+        return new MapSqlParameterSource()
+                .addValue("id", employee.getId())
                 .addValue("firstName", employee.getFirstName())
                 .addValue("lastName", employee.getLastName())
                 .addValue("role", employee.getRole());

@@ -14,4 +14,6 @@ public interface EmployeeRepository {
 
     Collection<Employee> getEmployees();
 
+    Employee updateEmployee(Employee employee);
+
 }
