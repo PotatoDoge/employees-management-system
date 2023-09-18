@@ -2,12 +2,17 @@ package com.bfp.employeesmanagementsystem.controller;
 
 import com.bfp.employeesmanagementsystem.dto.EmployeeDto;
 import com.bfp.employeesmanagementsystem.entity.Employee;
+import com.bfp.employeesmanagementsystem.response.HttpResponse;
 import com.bfp.employeesmanagementsystem.service.EmployeeService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
+import static java.time.LocalTime.now;
 
 @RestController
 @RequestMapping("employees")
@@ -17,29 +22,56 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getEmployees(){
-        return ResponseEntity.ok(employeeService.getEmployees());
+    public HttpResponse getEmployees(){
+        return HttpResponse.builder()
+                .timestamp(now().toString())
+                .statusCode(200)
+                .status(HttpStatus.OK)
+                .data(Map.of("employees", employeeService.getEmployees()))
+                .build();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id){
-        return ResponseEntity.ok(employeeService.getEmployeeById(id));
+    public HttpResponse getEmployeeById(@PathVariable("id") Long id){
+        return HttpResponse.builder()
+                .timestamp(now().toString())
+                .statusCode(200)
+                .status(HttpStatus.OK)
+                .data(Map.of("employee", employeeService.getEmployeeById(id)))
+                .build();
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeDto employeeDto){
-        return ResponseEntity.ok(employeeService.createEmployee(employeeDto));
+    public HttpResponse createEmployee(@RequestBody EmployeeDto employeeDto){
+        return HttpResponse.builder()
+                .timestamp(now().toString())
+                .statusCode(200)
+                .status(HttpStatus.CREATED)
+                .message("User created!")
+                .data(Map.of("employee", employeeService.createEmployee(employeeDto)))
+                .build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDto employeeDto){
-        return ResponseEntity.ok(employeeService.updateEmployee(id, employeeDto));
+    public HttpResponse updateEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDto employeeDto){
+        return HttpResponse.builder()
+                .timestamp(now().toString())
+                .statusCode(200)
+                .status(HttpStatus.OK)
+                .message("User updated!")
+                .data(Map.of("employee", employeeService.updateEmployee(id,employeeDto)))
+                .build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long id){
+    public HttpResponse deleteEmployee(@PathVariable("id") Long id){
         employeeService.deleteEmployee(id);
-        return ResponseEntity.ok("Employee deleted successfully!");
+        return HttpResponse.builder()
+                .timestamp(now().toString())
+                .statusCode(204)
+                .status(HttpStatus.NO_CONTENT)
+                .message("User deleted!")
+                .build();
     }
 
 }
