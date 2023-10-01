@@ -2,6 +2,8 @@ package com.bfp.employeesmanagementsystem.repository.impl;
 
 import com.bfp.employeesmanagementsystem.entity.Employee;
 import com.bfp.employeesmanagementsystem.repository.EmployeeRepository;
+import com.bfp.employeesmanagementsystem.response.exception.EmployeeNotFoundException;
+import com.bfp.employeesmanagementsystem.response.exception.InternalServerException;
 import com.bfp.employeesmanagementsystem.rowmapper.EmployeeRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +35,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             return employee;
         }
         catch (Exception e){
-            log.error("Error while creating user: " + e);
-            //throw new ApiException("An error occurred. Please try again");
+            log.error("Error while inserting the user into the database: " + e);
+            throw new InternalServerException("Error while inserting the user into the database");
         }
-        return null;
     }
 
     @Override
@@ -47,8 +48,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         }
         catch (Exception e){
             log.error("Error while fetching user: " + e);
+            throw new EmployeeNotFoundException("No employee was found with the given id");
         }
-        return null;
     }
 
     @Override
@@ -58,23 +59,47 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         }
         catch (Exception e){
             log.error("Error while fetching user: " + e);
+            throw new InternalServerException("Error while fetching users from database");
         }
-
-        return null;
     }
 
     @Override
     public Employee updateEmployee(Employee employee) {
         try{
             SqlParameterSource parameters = getSqlParametersSourceWithId(employee);
-            Long employeeId = (long) jdbc.update(UPDATE_EMPLOYEE, parameters);
-            employee.setId(employeeId);
+            int updatedEmployee = jdbc.update(UPDATE_EMPLOYEE, parameters);
+            if(updatedEmployee == 0){
+                log.error("User not found. (UPDATE User)");
+                throw new EmployeeNotFoundException(null);
+            }
             return employee;
+        }
+        catch (EmployeeNotFoundException ex){
+            throw new EmployeeNotFoundException("No employee found with the given id");
         }
         catch (Exception e){
             log.error("Error while fetching user: " + e);
+            throw new InternalServerException("Error while updating user in database");
         }
-        return null;
+    }
+
+    @Override
+    public void deleteEmployee(Long employeeId) {
+        try{
+            SqlParameterSource parameters = new MapSqlParameterSource().addValue("id",employeeId);
+            int id = jdbc.update(DELETE_EMPLOYEE, parameters);
+            if(id == 0){
+                log.error("No employee found with ID = {}", employeeId);
+                throw new EmployeeNotFoundException(null);
+            }
+        }
+        catch (EmployeeNotFoundException ex){
+            throw new EmployeeNotFoundException("No employee found with the given id");
+        }
+        catch (Exception e){
+            log.error("Error while deleting user: " + e);
+            throw new InternalServerException("Error while deleting user in database");
+        }
     }
 
     private SqlParameterSource getSqlParametersSource(Employee employee) {
