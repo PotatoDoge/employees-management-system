@@ -1,12 +1,10 @@
 package com.bfp.employeesmanagementsystem.controller;
 
 import com.bfp.employeesmanagementsystem.dto.EmployeeDto;
-import com.bfp.employeesmanagementsystem.entity.Employee;
 import com.bfp.employeesmanagementsystem.response.HttpResponse;
 import com.bfp.employeesmanagementsystem.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,7 +68,7 @@ public class EmployeeController {
                 .timestamp(now().toString())
                 .statusCode(204)
                 .status(HttpStatus.NO_CONTENT)
-                .message("User deleted!")
+                .message("User deleted successfully!")
                 .build();
     }
 
