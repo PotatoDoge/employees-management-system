@@ -6,8 +6,9 @@ import com.bfp.employeesmanagementsystem.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
-import java.util.List;
+
 import java.util.Map;
 
 import static java.time.LocalTime.now;
@@ -40,7 +41,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public HttpResponse createEmployee(@RequestBody EmployeeDto employeeDto){
+    public HttpResponse createEmployee(@RequestBody @Valid EmployeeDto employeeDto){
         return HttpResponse.builder()
                 .timestamp(now().toString())
                 .statusCode(200)
