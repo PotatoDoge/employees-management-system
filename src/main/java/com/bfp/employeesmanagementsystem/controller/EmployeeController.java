@@ -52,7 +52,7 @@ public class EmployeeController {
     }
 
     @PutMapping("{id}")
-    public HttpResponse updateEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDto employeeDto){
+    public HttpResponse updateEmployee(@PathVariable("id") Long id, @RequestBody @Valid EmployeeDto employeeDto){
         return HttpResponse.builder()
                 .timestamp(now().toString())
                 .statusCode(200)
