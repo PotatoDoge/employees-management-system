@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static java.time.LocalTime.now;
 
 @RestControllerAdvice
@@ -34,6 +31,17 @@ public class GlobalExceptionHandler {
                 .timestamp(now().toString())
                 .statusCode(500)
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .message(ex.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public HttpResponse invalidEmployeeBody(MethodArgumentNotValidException ex) {
+        return HttpResponse.builder()
+                .timestamp(now().toString())
+                .statusCode(400)
+                .status(HttpStatus.BAD_REQUEST)
                 .message(ex.getMessage())
                 .build();
     }
