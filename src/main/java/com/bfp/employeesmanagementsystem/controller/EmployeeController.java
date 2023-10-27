@@ -16,6 +16,7 @@ import static java.time.LocalTime.now;
 @RestController
 @RequestMapping("employees")
 @AllArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
