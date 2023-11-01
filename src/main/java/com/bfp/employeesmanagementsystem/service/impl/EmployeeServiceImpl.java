@@ -3,6 +3,7 @@ package com.bfp.employeesmanagementsystem.service.impl;
 import com.bfp.employeesmanagementsystem.dto.EmployeeDto;
 import com.bfp.employeesmanagementsystem.entity.Employee;
 import com.bfp.employeesmanagementsystem.repository.impl.EmployeeRepositoryImpl;
+import com.bfp.employeesmanagementsystem.response.exception.EmployeeNotFoundException;
 import com.bfp.employeesmanagementsystem.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    //TODO: Añadir excepciones en el servicio, y validar los body. Una vez teniendo esto, hacer pruebas con un front
 
     private final EmployeeRepositoryImpl employeeRepository;
 
@@ -24,7 +24,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getEmployees() {
-        List<Employee> foundEmployees = employeeRepository.getEmployees();
         return employeeRepository.getEmployees();
     }
 
