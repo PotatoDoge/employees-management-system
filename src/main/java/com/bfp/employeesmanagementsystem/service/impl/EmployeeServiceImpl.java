@@ -3,7 +3,6 @@ package com.bfp.employeesmanagementsystem.service.impl;
 import com.bfp.employeesmanagementsystem.dto.EmployeeDto;
 import com.bfp.employeesmanagementsystem.entity.Employee;
 import com.bfp.employeesmanagementsystem.repository.impl.EmployeeRepositoryImpl;
-import com.bfp.employeesmanagementsystem.response.exception.EmployeeNotFoundException;
 import com.bfp.employeesmanagementsystem.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
